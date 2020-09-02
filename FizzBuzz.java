@@ -1,5 +1,7 @@
 public class FizzBuzz {
 
+  // Method to calculate logic for fizzBuzz, if a number is divisible. and return
+  // the value
   public String fizzBuzz(int val) {
     if (val % 3 == 0 && val % 5 == 0) {
       return "FizzBuzz";
@@ -12,6 +14,7 @@ public class FizzBuzz {
     }
   }
 
+  // Method to loop to 100 and feed the number of the loop to our helper method
   public void fizzBuzzCounter() {
     for (int i = 1; i <= 100; i++) {
       String result = fizzBuzz(i);
@@ -19,6 +22,7 @@ public class FizzBuzz {
     }
   }
 
+  // Method that can run without an object being created
   public static void sayHello() {
     System.out.println("Hello!!!!!");
   }

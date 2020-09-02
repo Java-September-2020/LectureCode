@@ -55,6 +55,12 @@ public class FirstProgram {
     // Methods
     System.out.println(sayHello("Justin"));
     printNum();
+
+    // A Method with a return has to be wrapped with a System.out.println to display
+    // the return value. Think of a return as setting the method itself equal to the
+    // return statement.
+    // A Method that just prints something to the console, returns nothing, so it
+    // must be used with a void and doesn't need to be wrapped in System.out.println
   }
 
   public static String sayHello(String name) {
