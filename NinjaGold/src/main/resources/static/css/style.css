@@ -2,30 +2,22 @@ body {
 	background-color: silver;
 }
 
-
-.wrapper {
-	width: 1200px;
-	margin: auto;
-}
 .building {
-	display: inline-block;
-	width: 200px;
-	height: 200px;
-	border: solid 2px black;
 	padding: 10px;
-	vertical-align: top;
+	display: inline-block;
+	border: 2px solid black;
 	text-align: center;
 }
 
 .activities {
-	border: solid 2px black;
-	overflow: scroll
-}
-
-.green {
-	color: green;
+	width: 800px;
+	border: 2px solid black;
 }
 
 .red {
 	color: red;
+}
+
+.green {
+	color: green;
 }
