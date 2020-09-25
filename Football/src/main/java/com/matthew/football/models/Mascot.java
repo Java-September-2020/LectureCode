@@ -1,27 +1,29 @@
 package com.matthew.football.models;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="teams")
-public class Team {
+@Table(name="mascots")
+public class Mascot {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-	private String city;
-	private int players;
-	@OneToOne(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private Mascot mascot;
+	private String color;
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="team_id")
+	private Team team;
 	
-	public Team() {
+	
+	public Mascot() {
+		
 	}
 	public Long getId() {
 		return id;
@@ -35,27 +37,18 @@ public class Team {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCity() {
-		return city;
+	public String getColor() {
+		return color;
 	}
-	public void setCity(String city) {
-		this.city = city;
+	public void setColor(String color) {
+		this.color = color;
 	}
-	public int getPlayers() {
-		return players;
+	public Team getTeam() {
+		return team;
 	}
-	public void setPlayers(int players) {
-		this.players = players;
+	public void setTeam(Team team) {
+		this.team = team;
 	}
-	public Mascot getMascot() {
-		return mascot;
-	}
-	public void setMascot(Mascot mascot) {
-		this.mascot = mascot;
-	}
-	
-	
 	
 	
 }
-

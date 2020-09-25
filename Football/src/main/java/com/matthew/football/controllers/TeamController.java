@@ -2,50 +2,65 @@ package com.matthew.football.controllers;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
+import com.matthew.football.models.Mascot;
 import com.matthew.football.models.Team;
+import com.matthew.football.services.MascotService;
 import com.matthew.football.services.TeamService;
 
-@RestController
+@Controller
 public class TeamController {
+	@Autowired
 	private TeamService tService;
+	@Autowired
+	private MascotService mService;
 	
-	public TeamController(TeamService service) {
-		this.tService = service;
-	}
-	
-	// Routes
 	@RequestMapping("/")
-	public List<Team> index(){
-		return this.tService.getAllTeams();
-	}
-	// SELECT * FROM teams
-	
-	@RequestMapping("{id}")
-	public Team getTeam(@PathVariable("id") Long id) {
-		return this.tService.getOneTeam(id);
+	public String index(Model viewModel) {
+		List<Team> allTeams = this.tService.getAllTeams();
+		viewModel.addAttribute("allTeams", allTeams);
+		return "index.jsp";
 	}
 	
-	//SELECT FROM teams WHERE id = whatever path variable is
-	
-	@RequestMapping(value="/", method=RequestMethod.POST)
-	public Team create(Team newTeam) {
-		return this.tService.createTeam(newTeam);
-	}
-	//INSERT INTO teams (name, city, players) VALUES (whatever the values are);
-	
-	@RequestMapping(value="/team/update/{id}", method=RequestMethod.PUT)
-	public Team edit(@PathVariable("id") Long id, Team updatedTeam) {
-		return this.tService.updateTeam(updatedTeam);
+	@RequestMapping("/add")
+	public String addTeam(@ModelAttribute("team") Team team) {
+		
+		return "add.jsp";
 	}
 	
-	@RequestMapping(value="/team/delete/{id}", method=RequestMethod.DELETE)
-	public String removeTeam(@PathVariable("id") Long id) {
-		this.tService.deleteTeam(id);
-		return id + " has been removed from the database";
+	@RequestMapping("/{id}")
+	public String showTeam(@PathVariable("id") Long id, Model viewModel, @ModelAttribute("mascot") Mascot mascot) {
+		viewModel.addAttribute("team", this.tService.getOneTeam(id));
+		return "show.jsp";
+	}
+	
+	@PostMapping("/mascot")
+	public String addMascot(@ModelAttribute("mascot") Mascot newMascot, BindingResult result, Model viewModel) {
+		Long teamId = newMascot.getTeam().getId();
+		if(result.hasErrors()) {
+			viewModel.addAttribute("team", teamId);
+			return "show.jsp";
+		} else {
+			this.mService.create(newMascot);
+			return "redirect:/" + teamId;
+		}
+	}
+	
+	@PostMapping("/team")
+	public String addTeam(@ModelAttribute("team") Team newTeam, BindingResult result) {	
+		if(result.hasErrors()) {
+			return "add.jsp";
+		} else {
+			this.tService.createTeam(newTeam);
+			return "redirect:/";
+		}
 	}
 }
