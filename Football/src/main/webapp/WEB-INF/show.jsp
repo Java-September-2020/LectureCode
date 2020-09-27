@@ -38,10 +38,30 @@
 	</p>
 	<button>Add Mascot</button>
 </form:form>
-
 </c:otherwise>
 </c:choose>
-
+<hr>
+<h3>Edit Team</h3>
+<form:form method="POST" action="/${team.id}" modelAttribute="team">
+	<p>
+	<form:label path="name">Name:
+	<form:errors path="name"/>
+	<form:input path="name"/></form:label>
+	</p>
+	
+	<p>
+	<form:label path="city">City:
+	<form:errors path="city"/>
+	<form:input path="city"/></form:label>
+	</p>
+	<p>
+	<form:label path="players"># Of Players
+	<form:errors path="players"/>
+	<form:input path="players"/></form:label>
+	</p>
+	<button>Update Team</button>
+</form:form>
+<a href="/delete/${team.id }">Delete Team</a>
 </div>
 </body>
 </html>
