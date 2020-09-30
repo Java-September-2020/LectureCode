@@ -1,6 +1,9 @@
 package com.matthew.football.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.matthew.football.models.Mascot;
 import com.matthew.football.models.Team;
@@ -55,10 +60,26 @@ public class TeamController {
 		}
 	}
 	
-	@PostMapping("/team")
-	public String addTeam(@ModelAttribute("team") Team newTeam, BindingResult result) {	
+	// Old Way
+	@PostMapping("/oldway")
+	public String oldAddTeam(@RequestParam("name") String name, @RequestParam("city") String city, @RequestParam("players") int players, RedirectAttributes redirectAttr) {	
+		System.out.println(name + city + players);
+		ArrayList<String> errors = new ArrayList<String>();
+		if(name.equals("")) {
+			errors.add("Hey there, you forgot to add a name");
+		}
+		if(errors.size() > 0) {
+			for(String e: errors) {
+				redirectAttr.addFlashAttribute("errors", e);
+			}
+		}
+		return "redirect:/add";
+	}
+	
+	@PostMapping("/new")
+	public String addTeam(@ModelAttribute("team") Team newTeam, Model viewModel, BindingResult result) {
 		if(result.hasErrors()) {
-			return "add.jsp";
+			return "new.jsp";
 		} else {
 			this.tService.createTeam(newTeam);
 			return "redirect:/";
@@ -66,7 +87,7 @@ public class TeamController {
 	}
 	
 	@PostMapping("/{id}")
-	public String updateTeam(@ModelAttribute("team") Team updatedTeam, BindingResult result) {
+	public String updateTeam(@Valid @ModelAttribute("team") Team updatedTeam, BindingResult result, @ModelAttribute("mascot") Mascot mascot) {
 		if(result.hasErrors()) {
 			return "show.jsp";
 		} else {

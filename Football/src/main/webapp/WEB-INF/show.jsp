@@ -43,6 +43,7 @@
 <hr>
 <h3>Edit Team</h3>
 <form:form method="POST" action="/${team.id}" modelAttribute="team">
+
 	<p>
 	<form:label path="name">Name:
 	<form:errors path="name"/>

@@ -12,7 +12,7 @@
 <body>
 <div class="container">
 <h2>Add Team</h2>
-
+<hr>
 <form:form method="POST" action="/team" modelAttribute="team">
 	<p>
 	<form:label path="name">Name:
@@ -32,6 +32,28 @@
 	</p>
 	<button>Add Team</button>
 </form:form>
+<!--
+OLD WAY USING STAMDARD FORMS
+<c:forEach items="${errors}" var="err">
+${err}
+</c:forEach>
+<form action="/new" method="POST">
+<div class="form-group">
+<label for="name">Name</label>
+<input type="text" name="name">
+</div>
+<div class="form-group">
+<label for="name">City</label>
+<input type="text" name="city">
+</div>
+<div class="form-group">
+<label for="name">Players</label>
+<input type="text" name="players">
+</div>
+<button>Add Team</button>
+</form>
+-->
+</div>
 
 </div>
 </body>

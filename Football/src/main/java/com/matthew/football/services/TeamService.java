@@ -30,6 +30,11 @@ public class TeamService {
 		return this.tRepo.save(newTeam);
 	}
 	
+	public Team createTeam(String name, String city, int players) {
+		Team newTeam = new Team(name, city, players);
+		return this.tRepo.save(newTeam);
+	}
+	
 	//Update A Team
 	public Team updateTeam(Team updatedTeam) {
 		return this.tRepo.save(updatedTeam);
