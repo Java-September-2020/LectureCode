@@ -32,6 +32,7 @@
 	</p>
 	<button>Add Team</button>
 </form:form>
+
 <!--
 OLD WAY USING STAMDARD FORMS
 <c:forEach items="${errors}" var="err">

@@ -10,6 +10,7 @@ import com.matthew.football.models.Team;
 @Repository
 public interface TeamRepository extends CrudRepository<Team, Long> {
 	List<Team> findAll();
+
 }
 
 /*

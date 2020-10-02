@@ -17,7 +17,7 @@ public class TeamService {
 	
 	//GetAll
 	public List<Team> getAllTeams(){
-		return this.tRepo.findAll();
+		return this.tRepo.findByNameOrderByLastnameDesc();
 	}
 	
 	//GetOne

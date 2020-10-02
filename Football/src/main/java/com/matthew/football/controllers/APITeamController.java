@@ -20,7 +20,7 @@ public class APITeamController {
 	}
 	
 	// Routes
-	@RequestMapping("/")
+	@RequestMapping("")
 	public List<Team> index(){
 		return this.tService.getAllTeams();
 	}

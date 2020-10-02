@@ -13,7 +13,7 @@
 <div class="container">
 <h1>Welcome to Football dot Com</h1>
 <hr>
-<a href="/add">Add a New Team</a>
+<a href="/add">Add a New Team</a> | <a href="/players">Add Player To Team</a>
 <table class="table table-dark">
 <thead>
 <th>id</th>

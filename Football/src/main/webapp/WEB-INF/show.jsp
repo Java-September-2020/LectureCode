@@ -16,7 +16,14 @@
 <p>Name: ${team.name }</p>
 <p>City: ${team.city }</p>
 <p># Of Players ${team.players}</p>
-
+<hr>
+<h3>Active Roster</h3>
+<c:forEach items="${team.player}" var="player">
+<ol>
+<li>${player.name} - ${player.position} ${player.weight}</li> 
+</ol>
+</c:forEach>
+<hr>
 <c:choose>
 <c:when test="${team.mascot != null}">
 <p>Mascot: ${team.mascot.color} ${team.mascot.name}</p>
