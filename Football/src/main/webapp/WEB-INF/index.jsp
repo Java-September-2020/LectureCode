@@ -12,22 +12,33 @@
 <body>
 <div class="container">
 <h1>Welcome to Football dot Com</h1>
+Logged In As: <c:out value="${owner.firstName} - ${owner.lastName}"/>
 <hr>
-<a href="/add">Add a New Team</a> | <a href="/players">Add Player To Team</a>
+<a href="/teams/add">Add a New Team</a> | <a href="/players">Add Player To Team</a>
 <table class="table table-dark">
 <thead>
-<th>id</th>
+<th>Action</th>
 <th>Name</th>
 <th>City</th>
 <th>Number of Players</th>
 <th>Mascot</th>
+<th>Number Of Likes</th>
 </thead>
 <tbody>
 
 <c:forEach items="${allTeams}" var="team">
 <tr>
-<td>${team.id}</td>
-<td><a href="/${team.id}">${team.name }</a></td>
+<td>
+<c:choose>
+<c:when test="${team.likers.contains(owner.id)}">
+<td><a href="/teams/like/${team.id}">Like</a></td>
+</c:when>
+<c:otherwise>
+Liked!
+</c:otherwise>
+</c:choose>
+</td>
+<td><a href="teams/${team.id}">${team.name }</a></td>
 <td>${team.city}</td>
 <td>${team.players }</td>
 <td>
@@ -37,10 +48,11 @@
 ${team.mascot.color} ${team.mascot.name}
 </c:when>
 <c:otherwise>
-Does Not Have Mascot
+Does Not Have Mascot\
 </c:otherwise>
 </c:choose>
 </td>
+<td>${team.likers.size()}</td>
 </tr>
 </c:forEach>
 

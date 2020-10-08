@@ -13,7 +13,7 @@
 <div class="container">
 <h2>Add Team</h2>
 <hr>
-<form:form method="POST" action="/team" modelAttribute="team">
+<form:form method="POST" action="/teams/team" modelAttribute="team">
 	<p>
 	<form:label path="name">Name:
 	<form:errors path="name"/>

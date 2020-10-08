@@ -10,6 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -44,6 +47,13 @@ public class Team {
 	private Date createdAt;
 	@DateTimeFormat(pattern = "yyy-MM-DD HH:mm:ss")
 	private Date updatedAt;
+	@ManyToMany(fetch=FetchType.LAZY)
+	@JoinTable(
+		name="likes",
+		joinColumns = @JoinColumn(name="team_id"),
+		inverseJoinColumns = @JoinColumn(name="owner_id")
+		)
+	private List<Owner> likers;
 	
 	@PrePersist
 	protected void onCreate() {
@@ -119,6 +129,14 @@ public class Team {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public List<Owner> getLikers() {
+		return likers;
+	}
+
+	public void setLikers(List<Owner> likers) {
+		this.likers = likers;
 	}
 	
 	

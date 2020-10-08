@@ -3,6 +3,7 @@ package com.matthew.football.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +19,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.matthew.football.models.Mascot;
+import com.matthew.football.models.Owner;
 import com.matthew.football.models.Team;
 import com.matthew.football.services.MascotService;
+import com.matthew.football.services.OwnerService;
 import com.matthew.football.services.TeamService;
 
 @Controller
+@RequestMapping("/teams")
 public class TeamController {
 	@Autowired
 	private TeamService tService;
 	@Autowired
 	private MascotService mService;
+	@Autowired
+	private OwnerService oService;
 	
-	@RequestMapping("/")
-	public String index(Model viewModel) {
+	@RequestMapping("")
+	public String index(HttpSession session, Model viewModel) {
+		Long ownerId = (Long)session.getAttribute("owner_id");
+		System.out.println(ownerId);
+		Owner owner = this.oService.find(ownerId);
 		List<Team> allTeams = this.tService.getAllTeams();
 		viewModel.addAttribute("allTeams", allTeams);
+		viewModel.addAttribute("owner", owner);
 		return "index.jsp";
 	}
 	
@@ -100,5 +110,15 @@ public class TeamController {
 	public String deleteTeam(@PathVariable("id") Long id) {
 		this.tService.deleteTeam(id);
 		return "redirect:/";
+	}
+	
+	@GetMapping("/like/{id}")
+	private String like(@PathVariable("id") Long id, HttpSession session){
+		Long ownerId = (Long)session.getAttribute("owner_id");
+		Long teamId = id;
+		Owner liker = this.oService.find(ownerId);
+		Team likedTeam = this.tService.getOneTeam(teamId);
+		this.tService.addLiker(liker, likedTeam);
+		return "redirect:/teams";
 	}
 }

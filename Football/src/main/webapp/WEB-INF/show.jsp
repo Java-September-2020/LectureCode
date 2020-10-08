@@ -14,23 +14,13 @@
 <h3>Details For <c:out value="${team.name}"/></h3>
 <hr>
 <p>Name: ${team.name }</p>
-<p>City: ${team.city }</p>
-<p># Of Players ${team.players}</p>
-<hr>
-<h3>Active Roster</h3>
-<c:forEach items="${team.player}" var="player">
-<ol>
-<li>${player.name} - ${player.position} ${player.weight}</li> 
-</ol>
-</c:forEach>
-<hr>
 <c:choose>
 <c:when test="${team.mascot != null}">
 <p>Mascot: ${team.mascot.color} ${team.mascot.name}</p>
 </c:when>
 <c:otherwise>
 <h3>Add Mascot</h3>
-<form:form method="POST" action="/mascot" modelAttribute="mascot">
+<form:form method="POST" action="/teams/mascot" modelAttribute="mascot">
 	<form:hidden path="team" value="${team.id}"/>
 	<p>
 	<form:label path="name">Name:
@@ -47,9 +37,37 @@
 </form:form>
 </c:otherwise>
 </c:choose>
+<p>City: ${team.city }</p>
+<p># Of Players ${team.players}</p>
+<hr>
+<h3>Liked By:</h3>
+<ol>
+<c:forEach items="${team.likers}" var="owner">
+<li>${owner.firstName} ${owner.lastName}</li>
+</c:forEach>
+</ol>
+<hr>
+<h3>Active Roster</h3>
+<table class="table table-dark">
+<thead>
+<th>Player</th>
+<th>Position</th>
+<th>Stats</th>
+</thead>
+<tbody>
+<c:forEach items="${team.player}" var="player">
+<tr>
+<td>${player.name}</td>
+<td>${player.position}</td>
+<td> ${player.weight} lbs</td>
+</tr> 
+</c:forEach>
+</tbody>
+</table>
+
 <hr>
 <h3>Edit Team</h3>
-<form:form method="POST" action="/${team.id}" modelAttribute="team">
+<form:form method="POST" action="/teams/${team.id}" modelAttribute="team">
 
 	<p>
 	<form:label path="name">Name:
@@ -69,7 +87,7 @@
 	</p>
 	<button>Update Team</button>
 </form:form>
-<a href="/delete/${team.id }">Delete Team</a>
+<a href="/teams/delete/${team.id }">Delete Team</a>
 </div>
 </body>
 </html>
