@@ -1,37 +1,62 @@
 package com.matthew.football.controllers;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.matthew.football.models.Owner;
 import com.matthew.football.services.OwnerService;
+import com.matthew.football.validations.OwnerValidator;
 
 @Controller
 public class OwnerController {
 	@Autowired 
 	private OwnerService oService;
+	@Autowired
+	private OwnerValidator validator;
 	
 	
 	@RequestMapping("/")
-	private String index(Model viewModel) {
-		List<Owner> owner = this.oService.allOwners();
-		viewModel.addAttribute("owners", owner);
+	private String index(@ModelAttribute("owner") Owner owner) {
 		return "landing.jsp";
 	}
 	
+	@PostMapping("/register")
+	public String register(@Valid @ModelAttribute("owner") Owner owner, BindingResult result, HttpSession session) {
+		validator.validate(owner, result);
+		if(result.hasErrors()) {
+			// if there are validation errors, we want to send them to the fornt page
+			return "landing.jsp";
+		} 
+		Owner newOwner = this.oService.registerOwner(owner);
+		session.setAttribute("owner_id", newOwner.getId());
+		return "redirect:/teams";		
+		
+	}
+	
 	@PostMapping("/login")
-	public String login(HttpSession session, @RequestParam("owners") Long id) {
-		if(session.getAttribute("owner_id") == null) {
-			session.setAttribute("owner_id", id);
+	public String login(HttpSession session, @RequestParam("lemail") String email, @RequestParam("lpassword") String password, RedirectAttributes redirectAttrs) {
+		if(!this.oService.authenticateUser(email, password)) {
+			redirectAttrs.addFlashAttribute("loginError", "Invalid Credentials");
+			return "redirect:/";
 		}
-		 return "redirect:/teams";
+		Owner owner = this.oService.getByEmail(email);
+		session.setAttribute("owner_id", owner.getId());
+		return "redirect:/teams";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
 	}
 }

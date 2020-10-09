@@ -10,4 +10,6 @@ import com.matthew.football.models.Owner;
 @Repository
 public interface OwnerRepository extends CrudRepository<Owner, Long>{
 	List<Owner> findAll();
+	boolean existsByEmail(String email);
+	Owner findByEmail(String email);
 }

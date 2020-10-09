@@ -31,10 +31,11 @@ Logged In As: <c:out value="${owner.firstName} - ${owner.lastName}"/>
 <td>
 <c:choose>
 <c:when test="${team.likers.contains(owner.id)}">
-<td><a href="/teams/like/${team.id}">Like</a></td>
+Liked!
 </c:when>
 <c:otherwise>
-Liked!
+
+<td><a href="/teams/like/${team.id}">Like</a></td>
 </c:otherwise>
 </c:choose>
 </td>

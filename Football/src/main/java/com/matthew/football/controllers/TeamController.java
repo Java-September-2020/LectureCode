@@ -37,6 +37,9 @@ public class TeamController {
 	
 	@RequestMapping("")
 	public String index(HttpSession session, Model viewModel) {
+		if(session.getAttribute("owner_id") == null){
+			return "redirect:/";
+		}
 		Long ownerId = (Long)session.getAttribute("owner_id");
 		System.out.println(ownerId);
 		Owner owner = this.oService.find(ownerId);
