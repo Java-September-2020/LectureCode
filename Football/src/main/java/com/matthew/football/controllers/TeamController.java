@@ -1,5 +1,9 @@
 package com.matthew.football.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.matthew.football.models.Mascot;
@@ -34,6 +39,8 @@ public class TeamController {
 	private MascotService mService;
 	@Autowired
 	private OwnerService oService;
+	
+	private static String UPLOADED_FOLDER = "src/main/resources/static/images/";
 	
 	@RequestMapping("")
 	public String index(HttpSession session, Model viewModel) {
@@ -56,9 +63,32 @@ public class TeamController {
 	}
 	
 	@RequestMapping("/{id}")
-	public String showTeam(@PathVariable("id") Long id, Model viewModel, @ModelAttribute("mascot") Mascot mascot, @ModelAttribute("team") Team team) {
+	public String showTeam(@PathVariable("id") Long id, Model viewModel, @ModelAttribute("mascot") Mascot mascot, @ModelAttribute("team") Team team, RedirectAttributes redirectAttrs) {
 		viewModel.addAttribute("team", this.tService.getOneTeam(id));
 		return "show.jsp";
+	}
+	
+	@PostMapping("/upload/{id}")
+	public String uploadLogo(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttrs) {
+		Team team = tService.getOneTeam(id);
+		// Save the uploaded file to our static folder.
+		if(file.isEmpty()) {
+			redirectAttrs.addFlashAttribute("message", "Upload field cannot be empty");
+			return "redirect:/teams/" + id;
+		}
+		try { 
+			//Get the file and save it somewhere
+			byte[] bytes = file.getBytes();
+			Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+			Files.write(path, bytes);
+			
+			String url = "/images/" + file.getOriginalFilename();
+			this.tService.uploadPic(team, url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/teams/" + id;
 	}
 	
 	@PostMapping("/mascot")
@@ -69,7 +99,7 @@ public class TeamController {
 			return "show.jsp";
 		} else {
 			this.mService.create(newMascot);
-			return "redirect:/" + teamId;
+			return "redirect:/teams/" + teamId;
 		}
 	}
 	
@@ -95,7 +125,7 @@ public class TeamController {
 			return "new.jsp";
 		} else {
 			this.tService.createTeam(newTeam);
-			return "redirect:/";
+			return "redirect:/teams";
 		}
 	}
 	
@@ -112,7 +142,7 @@ public class TeamController {
 	@GetMapping("/delete/{id}")
 	public String deleteTeam(@PathVariable("id") Long id) {
 		this.tService.deleteTeam(id);
-		return "redirect:/";
+		return "redirect:/teams";
 	}
 	
 	@GetMapping("/like/{id}")

@@ -14,6 +14,11 @@
 <h3>Details For <c:out value="${team.name}"/></h3>
 <hr>
 <p>Name: ${team.name }</p>
+<p>Logo: <img src="${team.logo}" height="400px" width="500px">
+<form method="POST" action="/teams/upload/${team.id}" enctype="multipart/form-data">
+<p>Please select a file to upload: <input type="file" name="file"/></p>
+<input type="submit" value="Add Logo">
+</form>
 <c:choose>
 <c:when test="${team.mascot != null}">
 <p>Mascot: ${team.mascot.color} ${team.mascot.name}</p>

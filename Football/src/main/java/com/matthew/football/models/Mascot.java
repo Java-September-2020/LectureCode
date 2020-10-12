@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Value;
+
 @Entity
 @Table(name="mascots")
 public class Mascot {
@@ -49,6 +51,7 @@ public class Mascot {
 	public void setTeam(Team team) {
 		this.team = team;
 	}
+
 	
 	
 }

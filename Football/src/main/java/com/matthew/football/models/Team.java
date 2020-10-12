@@ -38,6 +38,7 @@ public class Team {
 	private String city;
 	@NotNull
 	private int players;
+	private String logo = "/images/default.JPG";
 	@OneToOne(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Mascot mascot;
 	@OneToMany(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
@@ -137,6 +138,14 @@ public class Team {
 
 	public void setLikers(List<Owner> likers) {
 		this.likers = likers;
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 	
 	

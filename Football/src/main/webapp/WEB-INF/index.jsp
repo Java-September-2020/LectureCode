@@ -25,7 +25,6 @@ Logged In As: <c:out value="${owner.firstName} - ${owner.lastName}"/>
 <th>Number Of Likes</th>
 </thead>
 <tbody>
-
 <c:forEach items="${allTeams}" var="team">
 <tr>
 <td>
@@ -34,7 +33,6 @@ Logged In As: <c:out value="${owner.firstName} - ${owner.lastName}"/>
 Liked!
 </c:when>
 <c:otherwise>
-
 <td><a href="/teams/like/${team.id}">Like</a></td>
 </c:otherwise>
 </c:choose>

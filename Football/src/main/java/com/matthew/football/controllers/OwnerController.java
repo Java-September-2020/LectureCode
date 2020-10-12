@@ -1,5 +1,10 @@
 package com.matthew.football.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -8,13 +13,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.matthew.football.models.Owner;
+import com.matthew.football.models.Team;
 import com.matthew.football.services.OwnerService;
+import com.matthew.football.services.TeamService;
 import com.matthew.football.validations.OwnerValidator;
 
 @Controller
@@ -23,7 +32,6 @@ public class OwnerController {
 	private OwnerService oService;
 	@Autowired
 	private OwnerValidator validator;
-	
 	
 	@RequestMapping("/")
 	private String index(@ModelAttribute("owner") Owner owner) {
@@ -59,4 +67,5 @@ public class OwnerController {
 		session.invalidate();
 		return "redirect:/";
 	}
+	
 }

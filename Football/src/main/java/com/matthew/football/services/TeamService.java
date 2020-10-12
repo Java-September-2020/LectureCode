@@ -58,4 +58,11 @@ public class TeamService {
 		// Update 
 		this.tRepo.save(team);
 	}
+	
+	//Save Image Path To Database
+	public void uploadPic(Team team, String uploadedURL) {
+		team.setLogo(uploadedURL);
+		updateTeam(team);
+	}
+
 }
