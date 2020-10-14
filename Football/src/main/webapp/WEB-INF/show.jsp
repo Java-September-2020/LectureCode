@@ -12,9 +12,11 @@
 <body>
 <div class="container">
 <h3>Details For <c:out value="${team.name}"/></h3>
+<p><a href="/teams/owner/${team.owner.id}"> Owner: ${team.owner.firstName} ${team.owner.lastName }</a></p>
 <hr>
 <p>Name: ${team.name }</p>
-<p>Logo: <img src="${team.logo}" height="400px" width="500px">
+<p>Logo: </p>
+<img src="${team.logo}" height="100px" width="100px">
 <form method="POST" action="/teams/upload/${team.id}" enctype="multipart/form-data">
 <p>Please select a file to upload: <input type="file" name="file"/></p>
 <input type="submit" value="Add Logo">
@@ -71,6 +73,7 @@
 </table>
 
 <hr>
+<c:if test="${team.owner.id == ownerId}">
 <h3>Edit Team</h3>
 <form:form method="POST" action="/teams/${team.id}" modelAttribute="team">
 
@@ -93,6 +96,7 @@
 	<button>Update Team</button>
 </form:form>
 <a href="/teams/delete/${team.id }">Delete Team</a>
+</c:if>
 </div>
 </body>
 </html>

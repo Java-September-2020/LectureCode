@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -41,6 +42,9 @@ public class Team {
 	private String logo = "/images/default.JPG";
 	@OneToOne(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Mascot mascot;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="owner_id")
+	private Owner owner;
 	@OneToMany(mappedBy="team", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Player> player;
 	@Column(updatable=false)
@@ -146,6 +150,14 @@ public class Team {
 
 	public void setLogo(String logo) {
 		this.logo = logo;
+	}
+
+	public Owner getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Owner owner) {
+		this.owner = owner;
 	}
 	
 	

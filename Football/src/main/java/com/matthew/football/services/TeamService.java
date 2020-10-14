@@ -59,6 +59,16 @@ public class TeamService {
 		this.tRepo.save(team);
 	}
 	
+	// Remove Liker From Team
+	public void removeLiker(Owner owner, Team team) {
+		//Get The List From the Team
+		List<Owner> likers = team.getLikers();
+		//Remove the owner
+		likers.remove(owner);
+		// Update
+		this.tRepo.save(team);
+	}
+	
 	//Save Image Path To Database
 	public void uploadPic(Team team, String uploadedURL) {
 		team.setLogo(uploadedURL);

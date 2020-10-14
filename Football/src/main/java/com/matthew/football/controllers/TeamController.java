@@ -57,14 +57,16 @@ public class TeamController {
 	}
 	
 	@RequestMapping("/add")
-	public String addTeam(@ModelAttribute("team") Team team) {
+	public String addTeam(@ModelAttribute("team") Team team, Model viewModel, HttpSession session) {
+		viewModel.addAttribute("ownerId", session.getAttribute("owner_id"));
 		
 		return "add.jsp";
 	}
 	
 	@RequestMapping("/{id}")
-	public String showTeam(@PathVariable("id") Long id, Model viewModel, @ModelAttribute("mascot") Mascot mascot, @ModelAttribute("team") Team team, RedirectAttributes redirectAttrs) {
+	public String showTeam(@PathVariable("id") Long id, Model viewModel, @ModelAttribute("mascot") Mascot mascot, @ModelAttribute("team") Team team, RedirectAttributes redirectAttrs, HttpSession session) {
 		viewModel.addAttribute("team", this.tService.getOneTeam(id));
+		viewModel.addAttribute("ownerId", session.getAttribute("owner_id"));
 		return "show.jsp";
 	}
 	
@@ -92,10 +94,11 @@ public class TeamController {
 	}
 	
 	@PostMapping("/mascot")
-	public String addMascot(@ModelAttribute("mascot") Mascot newMascot, BindingResult result, Model viewModel) {
+	public String addMascot(@ModelAttribute("mascot") Mascot newMascot, BindingResult result, Model viewModel, HttpSession session) {
 		Long teamId = newMascot.getTeam().getId();
 		if(result.hasErrors()) {
 			viewModel.addAttribute("team", teamId);
+			viewModel.addAttribute("ownerId", session.getAttribute("owner_id"));
 			return "show.jsp";
 		} else {
 			this.mService.create(newMascot);
@@ -120,8 +123,9 @@ public class TeamController {
 	}
 	
 	@PostMapping("/new")
-	public String addTeam(@ModelAttribute("team") Team newTeam, Model viewModel, BindingResult result) {
+	public String addTeam(@ModelAttribute("team") Team newTeam, Model viewModel, BindingResult result, HttpSession session) {
 		if(result.hasErrors()) {
+			viewModel.addAttribute("ownerId", session.getAttribute("owner_id"));
 			return "new.jsp";
 		} else {
 			this.tService.createTeam(newTeam);
@@ -154,4 +158,24 @@ public class TeamController {
 		this.tService.addLiker(liker, likedTeam);
 		return "redirect:/teams";
 	}
+	
+	@GetMapping("/unlike/{id}")
+	private String unlike(@PathVariable("id") Long id, HttpSession session) {
+		Long ownerId = (Long)session.getAttribute("owner_id");
+		Long teamId = id;
+		Owner disLiker = this.oService.find(ownerId);
+		Team unLikedTeam = this.tService.getOneTeam(teamId);
+		this.tService.removeLiker(disLiker, unLikedTeam);
+		return "redirect:/teams";
+	}
+	
+	@GetMapping("/owner/{id}")
+	private String ownerProfile(@PathVariable("id") Long id, Model viewModel){
+		viewModel.addAttribute("owner", this.oService.find(id));
+		Owner lily = this.oService.find(id);
+		System.out.println(lily.getTeams());
+		
+		return "profile.jsp";
+	}
+	
 }

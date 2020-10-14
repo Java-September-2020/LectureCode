@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
     <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+    <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,11 +11,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 </head>
 <body>
-<div class="container">
-<h1>Welcome to Football dot Com</h1>
-Logged In As: <c:out value="${owner.firstName} - ${owner.lastName}"/>
-<hr>
-<a href="/teams/add">Add a New Team</a> | <a href="/players">Add Player To Team</a>
+<t:wrapper>
 <table class="table table-dark">
 <thead>
 <th>Action</th>
@@ -29,11 +26,12 @@ Logged In As: <c:out value="${owner.firstName} - ${owner.lastName}"/>
 <tr>
 <td>
 <c:choose>
-<c:when test="${team.likers.contains(owner.id)}">
-Liked!
+<c:when test="${team.likers.contains(owner)}">
+<a href="teams/unlike/${team.id }">Un-Like</a>
 </c:when>
 <c:otherwise>
-<td><a href="/teams/like/${team.id}">Like</a></td>
+<a href="teams/like/${team.id}">Like</a>
+
 </c:otherwise>
 </c:choose>
 </td>
@@ -61,5 +59,6 @@ Does Not Have Mascot\
 
 
 </div>
+</t:wrapper>
 </body>
 </html>

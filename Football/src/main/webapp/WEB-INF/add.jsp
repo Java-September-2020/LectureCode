@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
     <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+    <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,9 +12,11 @@
 </head>
 <body>
 <div class="container">
+<t:wrapper>
 <h2>Add Team</h2>
 <hr>
 <form:form method="POST" action="/teams/new" modelAttribute="team">
+<form:input type="hidden" path="owner" value="${ownerId}"/>
 	<p>
 	<form:label path="name">Name:
 	<form:errors path="name"/>
@@ -32,7 +35,7 @@
 	</p>
 	<button>Add Team</button>
 </form:form>
-
+</t:wrapper>
 <!--
 OLD WAY USING STAMDARD FORMS
 <c:forEach items="${errors}" var="err">
@@ -57,5 +60,6 @@ ${err}
 </div>
 
 </div>
+
 </body>
 </html>
